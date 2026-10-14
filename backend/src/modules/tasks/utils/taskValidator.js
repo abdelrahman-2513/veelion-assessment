@@ -20,20 +20,20 @@ function ensureNoUnknownFields(payload) {
   }
 }
 
-function normalizeTitleIfPresent(payload, normalized) {
+function normalizeTitleIfPresent(payload, normalized, minLength) {
   if (!Object.hasOwn(payload, 'title')) {
     return;
   }
-
   if (typeof payload.title !== 'string') {
     throw new HttpError(400, '"title" must be a string.');
   }
-
   const trimmedTitle = payload.title.trim();
   if (!trimmedTitle) {
     throw new HttpError(400, '"title" cannot be empty.');
   }
-
+  if (trimmedTitle.length < minLength) {
+    throw new HttpError(400, 'Title is too short.');
+  }
   normalized.title = trimmedTitle;
 }
 
@@ -54,7 +54,7 @@ function validateCreateTask(payload) {
   ensureNoUnknownFields(payload);
 
   const normalized = {};
-  normalizeTitleIfPresent(payload, normalized);
+  normalizeTitleIfPresent(payload, normalized, 1);
   normalizeCompletedIfPresent(payload, normalized);
 
   if (!Object.hasOwn(normalized, 'title')) {
@@ -73,7 +73,7 @@ function validateUpdateTask(payload) {
   ensureNoUnknownFields(payload);
 
   const normalized = {};
-  normalizeTitleIfPresent(payload, normalized);
+  normalizeTitleIfPresent(payload, normalized,2);
   normalizeCompletedIfPresent(payload, normalized);
 
   if (Object.keys(normalized).length === 0) {
