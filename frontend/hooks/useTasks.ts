@@ -21,12 +21,17 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
   });
 
   if (!response.ok) {
+    let message = `Request failed with ${response.status}`;
+
     try {
       const body = (await response.json()) as ErrorResponse;
-      throw new Error(body.error?.message || `Request failed with ${response.status}`);
-    } catch (error) {
-      throw new Error(getErrorMessage(error, `Request failed with ${response.status}`));
+      if (body.error?.message) {
+        message = body.error.message;
+      }
+    } catch {
     }
+
+    throw new Error(message);
   }
 
   return (await response.json()) as T;
@@ -35,14 +40,16 @@ async function requestJson<T>(url: string, init?: RequestInit): Promise<T> {
 export function useTasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState<TaskFilter>("all");
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
-  const [updatingTaskId, setUpdatingTaskId] = useState<string>("");
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [actionError, setActionError] = useState("");
+  const [updatingTaskId, setUpdatingTaskId] = useState("");
 
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
-      setError("");
+      setLoadError("");
+      setActionError("");
 
       const body = await requestJson<TasksResponse>("/api/tasks", {
         method: "GET",
@@ -50,7 +57,7 @@ export function useTasks() {
 
       setTasks(body.data);
     } catch (error) {
-      setError(getErrorMessage(error, "Could not load tasks right now."));
+      setLoadError(getErrorMessage(error, "Could not load tasks right now."));
     } finally {
       setLoading(false);
     }
@@ -59,7 +66,7 @@ export function useTasks() {
   const updateTaskStatus = useCallback(async (taskId: string, completed: boolean) => {
     try {
       setUpdatingTaskId(taskId);
-      setError("");
+      setActionError("");
 
       const body = await requestJson<TaskResponse>(`/api/tasks/${taskId}`, {
         method: "PATCH",
@@ -70,7 +77,7 @@ export function useTasks() {
         previous.map((task) => (task.id === taskId ? body.data : task))
       );
     } catch (error) {
-      setError(getErrorMessage(error, "Could not update task status."));
+      setActionError(getErrorMessage(error, "Could not update task status."));
     } finally {
       setUpdatingTaskId("");
     }
@@ -97,7 +104,8 @@ export function useTasks() {
     filteredTasks,
     filter,
     loading,
-    error,
+    loadError,
+    actionError,
     updatingTaskId,
     setFilter,
     fetchTasks,
