@@ -24,26 +24,24 @@ export function TaskDashboard() {
 
   return (
     <section className="stack">
-      <header className="card" style={{ padding: "1rem" }}>
-        <h1 style={{ marginTop: 0, marginBottom: "0.5rem" }}>Task Dashboard</h1>
+      <header className="card page-header">
+        <h1>Task Dashboard</h1>
+        <p>Filter by status and toggle completion.</p>
       </header>
 
       <StatusFilter value={filter} onChange={setFilter} />
 
       {loading ? (
-        <section className="card" style={{ padding: "1rem" }}>
-          <p style={{ margin: 0 }}>Loading tasks...</p>
+        <section className="card">
+          <p className="muted" style={{ margin: 0 }}>
+            Loading tasks...
+          </p>
         </section>
       ) : null}
 
       {loadError ? (
-        <section
-          className="card"
-          style={{ padding: "1rem", borderColor: "#e3b4c0", background: "#fff8fa" }}
-        >
-          <p style={{ marginTop: 0, marginBottom: "0.75rem", color: "var(--danger)" }}>
-            {loadError}
-          </p>
+        <section className="card alert">
+          <p>{loadError}</p>
           <button type="button" className="button" onClick={fetchTasks}>
             Retry
           </button>
@@ -51,11 +49,8 @@ export function TaskDashboard() {
       ) : null}
 
       {actionError ? (
-        <section
-          className="card"
-          style={{ padding: "1rem", borderColor: "#e3b4c0", background: "#fff8fa" }}
-        >
-          <p style={{ margin: 0, color: "var(--danger)" }}>{actionError}</p>
+        <section className="card alert">
+          <p>{actionError}</p>
         </section>
       ) : null}
 

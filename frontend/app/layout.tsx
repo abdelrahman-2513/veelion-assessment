@@ -11,7 +11,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <div style={{ width: "min(980px, 100% - 2rem)", margin: "0 auto", padding: "2rem 0 3rem" }}>
+        <div className="shell">
           <AppNav />
           {children}
         </div>

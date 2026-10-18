@@ -13,9 +13,10 @@ export function ActivityFeed() {
 
   return (
     <section className="stack">
-      <section className="card" style={{ padding: "1rem" }}>
-        <h1 style={{ marginTop: 0, marginBottom: "0.5rem" }}>Activity Feed</h1>
-        <label htmlFor="activity-search" style={{ display: "block", marginBottom: "0.4rem" }}>
+      <section className="card page-header">
+        <h1>Activity Feed</h1>
+        <p>Search actions and info across the log.</p>
+        <label htmlFor="activity-search" className="field-label">
           Search activity
         </label>
         <input
@@ -27,17 +28,16 @@ export function ActivityFeed() {
       </section>
 
       {loading ? (
-        <section className="card" style={{ padding: "1rem" }}>
-          <p style={{ margin: 0 }}>Loading activity...</p>
+        <section className="card">
+          <p className="muted" style={{ margin: 0 }}>
+            Loading activity...
+          </p>
         </section>
       ) : null}
 
       {error ? (
-        <section
-          className="card"
-          style={{ padding: "1rem", borderColor: "#e3b4c0", background: "#fff8fa" }}
-        >
-          <p style={{ marginTop: 0, marginBottom: "0.75rem", color: "var(--danger)" }}>{error}</p>
+        <section className="card alert">
+          <p>{error}</p>
           <button type="button" className="button" onClick={fetchActivity}>
             Retry
           </button>
@@ -46,18 +46,18 @@ export function ActivityFeed() {
 
       {!loading && !error ? (
         <>
-          <section className="card" style={{ padding: "1rem" }}>
-            <small style={{ color: "var(--muted)" }}>
-              Total: {activity.length} | Visible: {filteredActivity.length}
-            </small>
+          <section className="card meta-bar">
+            Total: {activity.length} | Visible: {filteredActivity.length}
           </section>
 
           {filteredActivity.length === 0 ? (
-            <section className="card" style={{ padding: "1rem" }}>
-              <p style={{ margin: 0, color: "var(--muted)" }}>{emptyMessage}</p>
+            <section className="card">
+              <p className="muted" style={{ margin: 0 }}>
+                {emptyMessage}
+              </p>
             </section>
           ) : (
-            <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.7rem" }}>
+            <ul className="item-list">
               {filteredActivity.map((item) => (
                 <ActivityItem key={item.id} item={item} />
               ))}

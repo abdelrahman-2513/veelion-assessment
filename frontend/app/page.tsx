@@ -2,28 +2,26 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <main>
-      <header className="stack" style={{ marginBottom: "1.5rem" }}>
-        <h1 style={{ margin: 0 }}>VeeLion Task Management</h1>
-        <p style={{ margin: 0, color: "var(--muted)" }}>
-          Tasks, activity, and a summary report against the local API.
-        </p>
+    <main className="stack">
+      <header className="page-header">
+        <h1>VeeLion Task Management</h1>
+        <p>Tasks, activity, and a summary report against the local API.</p>
       </header>
 
-      <section
-        className="stack"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}
-      >
-        <Link href="/tasks" className="card" style={{ padding: "1rem", display: "block" }}>
-          <h2 style={{ marginTop: 0 }}>Task Dashboard</h2>
+      <section className="home-grid">
+        <Link href="/tasks" className="card home-card">
+          <h2>Task Dashboard</h2>
+          <p>Filter tasks and update their status.</p>
         </Link>
 
-        <Link href="/activity" className="card" style={{ padding: "1rem", display: "block" }}>
-          <h2 style={{ marginTop: 0 }}>Activity Feed</h2>
+        <Link href="/activity" className="card home-card">
+          <h2>Activity Feed</h2>
+          <p>Search recent actions across the app.</p>
         </Link>
 
-        <Link href="/reports" className="card" style={{ padding: "1rem", display: "block" }}>
-          <h2 style={{ marginTop: 0 }}>Reports</h2>
+        <Link href="/reports" className="card home-card">
+          <h2>Reports</h2>
+          <p>Totals by status and recent activity count.</p>
         </Link>
       </section>
     </main>
